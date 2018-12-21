@@ -1,0 +1,51 @@
+include:
+- '*'
+kind: ArchiveUploadSpec
+name: default-RWed
+
+---
+apiVersion: fission.io/v1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: b9sl
+  namespace: default
+spec:
+  deployment:
+    checksum: {}
+    type: url
+    url: archive://default-RWed
+  environment:
+    name: python
+    namespace: default
+  source:
+    checksum: {}
+status:
+  buildstatus: none
+
+---
+apiVersion: fission.io/v1
+kind: Function
+metadata:
+  creationTimestamp: null
+  name: pyfunc
+  namespace: default
+spec:
+  InvokeStrategy:
+    ExecutionStrategy:
+      ExecutorType: newdeploy
+      MaxScale: 1
+      MinScale: 1
+      TargetCPUPercent: 80
+    StrategyType: execution
+  configmaps: null
+  environment:
+    name: python
+    namespace: default
+  package:
+    functionName: user.main
+    packageref:
+      name: b9sl
+      namespace: default
+  resources: {}
+  secrets: null

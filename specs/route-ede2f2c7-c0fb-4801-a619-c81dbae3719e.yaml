@@ -1,0 +1,15 @@
+apiVersion: fission.io/v1
+kind: HTTPTrigger
+metadata:
+  creationTimestamp: null
+  name: ede2f2c7-c0fb-4801-a619-c81dbae3719e
+  namespace: default
+spec:
+  createingress: true
+  functionref:
+    functionweights: null
+    name: pyfunc
+    type: name
+  host: ""
+  method: GET
+  relativeurl: /some/test
