@@ -1,4 +1,4 @@
-# fission-spec-example
+# Fission Spec Example
 
 ## Building source code locally
 
@@ -172,6 +172,27 @@ spec:
       namespace: default
   resources: {}
   secrets: null
+```
+Similarly you can create a route for the function
+
+```
+$ fission route create --url /some/test --function pyfunc --createingress --spec
+$ cat specs/route-ede2f2c7-c0fb-4801-a619-c81dbae3719e.yaml 
+apiVersion: fission.io/v1
+kind: HTTPTrigger
+metadata:
+  creationTimestamp: null
+  name: ede2f2c7-c0fb-4801-a619-c81dbae3719e
+  namespace: default
+spec:
+  createingress: true
+  functionref:
+    functionweights: null
+    name: pyfunc
+    type: name
+  host: ""
+  method: GET
+  relativeurl: /some/test
 ```
 
 Now next step is to validate the specs and apply them. In a typical CI/CD workflow, the developer will create specs and commit them to Git. The CI/CD system will only validate and apply specs. The apply command makes sure that the changes only are applied to the cluster.
