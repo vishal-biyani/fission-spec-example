@@ -297,3 +297,14 @@ Now you can refer to both places using multiple `--deploy` argument and build a 
 $ fission fn create --name pyfunc --env python --executortype newdeploy --minscale 1 --deploy "*" --deploy "../lib_pyyaml/*" --entrypoint user.main --spec
 
 ```
+
+You will notice that the file upload picks up all the files specified:
+
+```
+$ cat specs/function-pyfunc.yaml 
+include:
+- '*'
+- ../lib_pyyaml/*
+kind: ArchiveUploadSpec
+name: default-CRfl
+```
