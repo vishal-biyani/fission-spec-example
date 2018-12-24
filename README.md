@@ -226,6 +226,8 @@ Deleted Function default/pyfunc
 
 ## Specs on steroids
 
+### Environment Variables
+
 The specs allow you do additional things. The `spec.runtime.container` is basically the container spec from Kubernetes. This allows you add environment variables to Functions as shown below. In future Fission might support `PodSpec` - which will allow to do more things in future.
 
 ```
@@ -253,3 +255,45 @@ spec:
   version: 2
 ```
 
+### Using code from one folder and libraries from others
+
+If you have code in one directory - but the libraries which code uses in some other directory, then it makes sense not to replicate the library code into every function code. The spec and multiple deploy options allow you to fetch code from multiple directories and build a function.
+
+Source code directory:
+```
+$ tree
+.
+├── README.md
+├── __init__.py
+├── build.sh
+├── requirements.txt
+├── specs
+│   ├── README
+│   ├── env-python.yaml
+│   ├── fission-deployment-config.yaml
+│   ├── function-pyfunc.yaml
+│   └── route-ede2f2c7-c0fb-4801-a619-c81dbae3719e.yaml
+└── user.py
+
+1 directory, 10 files
+
+```
+
+
+And the directory which has library code:
+
+```
+$ tree -L 1 ../lib_pyyaml/
+../lib_pyyaml/
+├── PyYAML-3.13.dist-info
+├── _yaml.cpython-37m-x86_64-linux-gnu.so
+└── yaml
+
+```
+
+Now you can refer to both places using multiple `--deploy` argument and build a function:
+
+```
+$ fission fn create --name pyfunc --env python --executortype newdeploy --minscale 1 --deploy "*" --deploy "../lib_pyyaml/*" --entrypoint user.main --spec
+
+```
